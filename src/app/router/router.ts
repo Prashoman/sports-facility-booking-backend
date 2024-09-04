@@ -2,10 +2,11 @@ import { Router } from "express";
 import { CategoryRoute } from "../modules/category/category.route";
 import { ProductRoute } from "../modules/product/product.route";
 import { CheckOutRoute } from "../modules/checkout/checkout.route";
+import { UserRoute } from "../modules/user/user.route";
+
 
 
 const router = Router();
-
 const modulerRoute = [
   {
     path: "/category",
@@ -18,11 +19,15 @@ const modulerRoute = [
   {
     path:"",
     route:CheckOutRoute
+  },
+  {
+    path:"/auth",
+    route: UserRoute
   }
 ];
 
-modulerRoute.forEach((route) => {
-  router.use(route.path, route.route);
+modulerRoute.forEach((root) => {
+  router.use(root.path, root.route);
 });
 
 export default router;
