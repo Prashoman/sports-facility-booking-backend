@@ -24,7 +24,6 @@ const getAllUsersFormDB = async()=>{
 
 const useLoginFromDB = async (payload:TUserLogin)=>{
     const {email,password} = payload;
-    
     const user = await User.findOne({email}).select('+password');
     if(!user){
         throw new AppError(httpStatus.NOT_FOUND, 'Email Not Found');
