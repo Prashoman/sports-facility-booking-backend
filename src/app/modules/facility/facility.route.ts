@@ -2,12 +2,13 @@ import  express  from "express";
 import { validationMiddleware } from "../../middleware/Validation.Middelware";
 import { FacilityValidation } from "./facility.validation";
 import { FacilityController } from "./facility.controller";
+import auth from "../../middleware/auth";
 
 
 const route = express.Router();
 
 
-route.post('/facility', validationMiddleware(FacilityValidation.FacilityCreateValidation), FacilityController.createFacility);
+route.post('/facility', auth(), validationMiddleware(FacilityValidation.FacilityCreateValidation), FacilityController.createFacility);
 
 route.put('/facility/:id', validationMiddleware(FacilityValidation.FacilityUpdateValidation), FacilityController.updateFacility);
 
