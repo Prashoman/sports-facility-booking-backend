@@ -8,13 +8,13 @@ import auth from "../../middleware/auth";
 const route = express.Router();
 
 
-route.post('/facility', auth(), validationMiddleware(FacilityValidation.FacilityCreateValidation), FacilityController.createFacility);
+route.post('/facility', auth("admin"), validationMiddleware(FacilityValidation.FacilityCreateValidation), FacilityController.createFacility);
 
-route.put('/facility/:id', validationMiddleware(FacilityValidation.FacilityUpdateValidation), FacilityController.updateFacility);
+route.put('/facility/:id', auth("admin"), validationMiddleware(FacilityValidation.FacilityUpdateValidation), FacilityController.updateFacility);
 
 route.get('/facility', FacilityController.getAllFacilities);
 
-route.delete('/facility/:id', FacilityController.deleteFacility);
+route.delete('/facility/:id', auth("admin"), FacilityController.deleteFacility);
 
 
 

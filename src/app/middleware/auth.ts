@@ -18,12 +18,15 @@ const auth = (...requiredRoles: TUserRole[]) => {
     const token = req.headers.authorization
       ? req.headers.authorization.split(" ")[1]
       : undefined;
+console.log("token:",token);
 
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not logged in");
     }
 
     const decoded =  jwt.verify(token, config.jwt_token_secret as string);
+    console.log("decoded after:",decoded);
+    
 
     if (!decoded) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Invalid token");
@@ -42,6 +45,8 @@ const auth = (...requiredRoles: TUserRole[]) => {
         'You are not authorized  hi!',
       );
     }
+    console.log("decoded",decoded);
+    
     req.user = decoded as JwtPayload & { userRole: string };
     next();
   });

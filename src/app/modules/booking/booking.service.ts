@@ -5,6 +5,7 @@ import { TBooking } from "./booking.interface";
 import { Facility } from "../facility/facility.model";
 import timeToConvertHours from "../../../utils/timeToConvertHours";
 import { Booking } from "./booking.model";
+import { dateFormat, getFormattedTodayDate } from "./booking.constent";
 
 const bookingInsertIntoDb = async (
   payload: Partial<TBooking>,
@@ -44,6 +45,52 @@ const bookingInsertIntoDb = async (
   return result;
 };
 
+const bookingsGetFromDB = async (date: string | undefined) => {
+  if (!date) {
+    const result = await Booking.find().populate("user").populate("facility");
+    return result;
+  }
+
+  const DateFormatCheck = dateFormat.test(date);
+  if (!DateFormatCheck) {
+
+    const todayDate = getFormattedTodayDate(new Date());
+    console.log("Today Date :",todayDate);
+    
+    const result = await Booking.find({ date: todayDate }).select("startTime endTime");
+    return result;
+  }
+  const result = await Booking.find({ date }).select("startTime endTime");
+  return result;
+};
+
+const getBookingByAdminFormDB = async (userRole: string) => {
+  if (userRole !== "admin") {
+    throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
+  }
+  const result = await Booking.find().populate("user").populate("facility");
+  return result;
+}
+
+const getBookingByUserFormDB = async (userId: string) => {
+  const exitsUser = await User.findById(userId);
+  if (!exitsUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const result = await Booking.find({ user: userId }).populate("facility");
+  return result;
+}
+
+const deleteBookingFromDB = async (bookingId: string) => {
+
+  const result = await Booking.findByIdAndUpdate(bookingId, { isBooked: "canceled" }, { new: true });
+  return result;
+}
+
 export const BookingService = {
   bookingInsertIntoDb,
+  bookingsGetFromDB,
+  getBookingByAdminFormDB,
+  getBookingByUserFormDB,
+  deleteBookingFromDB
 };

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { dateFormat } from "./booking.constent";
 
 const timeStringSchema = z.string().refine(
   (time) => {
@@ -10,7 +11,7 @@ const timeStringSchema = z.string().refine(
   },
 );
 
-const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+
 
 const BookingInsertValidation = z.object({
   body: z.object({
