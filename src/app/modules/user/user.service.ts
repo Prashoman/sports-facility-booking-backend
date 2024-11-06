@@ -22,6 +22,16 @@ const getAllUsersFormDB = async()=>{
     return result;
 }
 
+const createAdminIntoDB = async (payload:TUser)=>{
+    const exist = await User.findOne({email:payload.email});
+    if(exist){
+        throw new AppError(httpStatus.FORBIDDEN, 'Email already exist');
+    }
+    payload.role = 'admin';
+    const result = await User.create(payload);
+    return result;
+}
+
 const useLoginFromDB = async (payload:TUserLogin)=>{
     const {email,password} = payload;
     const user = await User.findOne({email}).select('+password');
@@ -38,9 +48,6 @@ const useLoginFromDB = async (payload:TUserLogin)=>{
     const refreshToken = createToken(jwtPayload,config.jwt_refresh_token_secret as string,config.jwt_refresh_token_expiry as string);
 
     const userWithOutPassword = await User.findById(user._id);
-
-
-    
     return{
         userWithOutPassword,
         accessToken,
@@ -54,5 +61,6 @@ const useLoginFromDB = async (payload:TUserLogin)=>{
 export const UserService = {
     signUpIntoDB,
     getAllUsersFormDB,
-    useLoginFromDB
+    useLoginFromDB,
+    createAdminIntoDB
 }

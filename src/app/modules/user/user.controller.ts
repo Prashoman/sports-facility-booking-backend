@@ -45,8 +45,20 @@ const userLogin = catchAsyn(async (req: Request, res: Response) => {
   });
 });
 
+const createAdmin = catchAsyn(async (req: Request, res: Response) => {
+  const userInfo = req.body;
+  const insertedUser = await UserService.createAdminIntoDB(userInfo);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: insertedUser,
+    message: "Admin created successfully",
+  });
+});
+
 export const UserController = {
   userSignUp,
   getAllUsers,
   userLogin,
+  createAdmin
 };

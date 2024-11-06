@@ -9,7 +9,7 @@ const UserCreateValidation = z.object({
         password:z.string().nonempty(),
         phone:z.string().nonempty(),
         address:z.string().nonempty(),
-        role:z.enum(['admin','user'])
+        // role:z.enum(['admin','user'])
     })
 })
 
