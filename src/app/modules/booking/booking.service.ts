@@ -55,7 +55,7 @@ const bookingsGetFromDB = async (date: string | undefined) => {
   if (!DateFormatCheck) {
 
     const todayDate = getFormattedTodayDate(new Date());
-    console.log("Today Date :",todayDate);
+    // console.log("Today Date :",todayDate);
     
     const result = await Booking.find({ date: todayDate }).select("startTime endTime");
     return result;

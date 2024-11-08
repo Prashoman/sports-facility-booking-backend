@@ -11,7 +11,7 @@ const productGetDB = async (
   payload: Record<string, unknown>
 ) => {
   const baseQuery = { ...payload };
-  console.log({ baseQuery });
+  // console.log({ baseQuery });
   
   const deleteQuery = ["searchTerm", "sort", "page", "limit","categoryId"];
   deleteQuery.forEach((element) => {
