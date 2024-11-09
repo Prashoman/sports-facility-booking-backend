@@ -12,7 +12,7 @@ route.post('/facility', auth("admin"), validationMiddleware(FacilityValidation.F
 
 route.put('/facility/:id', auth("admin"), validationMiddleware(FacilityValidation.FacilityUpdateValidation), FacilityController.updateFacility);
 
-route.get('/facility', FacilityController.getAllFacilities);
+route.get('/facility/:facilityId?', FacilityController.getAllFacilities);
 
 route.delete('/facility/:id', auth("admin"), FacilityController.deleteFacility);
 

@@ -33,8 +33,9 @@ const updateFacility = catchAsyn(async (req: Request, res: Response) => {
 });
 
 const getAllFacilities = catchAsyn(async (req: Request, res: Response) => {
-  const allFacilities = await FacilityService.getAllFacilitiesFromDB();
-  if(allFacilities.length === 0){
+  const facilityId = req.params.facilityId;
+  const allFacilities = await FacilityService.getAllFacilitiesFromDB(facilityId);
+  if(!allFacilities || (Array.isArray(allFacilities) && allFacilities.length === 0)){
     sendResponse(res, {
        statusCode: httpStatus.NOT_FOUND,
        success: false,

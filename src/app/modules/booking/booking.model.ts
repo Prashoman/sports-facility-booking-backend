@@ -1,7 +1,4 @@
 import { model, Schema } from "mongoose";
-
-import bcrypt from 'bcrypt';
-import config from "../../config";
 import { TBooking } from "./booking.interface";
 
 

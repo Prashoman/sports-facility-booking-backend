@@ -11,7 +11,11 @@ const updateFacilityFromDB = async (id: string, payload: TFacility) => {
   return result;
 };
 
-const getAllFacilitiesFromDB = async () => {
+const getAllFacilitiesFromDB = async (payload:string) => {
+  if(payload){
+    const result = await Facility.findById(payload,{ isDeleted: false });
+    return result;
+  }
   const result = await Facility.find({ isDeleted: false });
   return result;
 };
