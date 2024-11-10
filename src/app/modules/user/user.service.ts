@@ -57,10 +57,15 @@ const useLoginFromDB = async (payload:TUserLogin)=>{
 
 }
 
+const getAllAdminIntoDB = async () =>{
+    const result = await User.find({role:'admin'});
+    return result;
+}
 
 export const UserService = {
     signUpIntoDB,
     getAllUsersFormDB,
     useLoginFromDB,
-    createAdminIntoDB
+    createAdminIntoDB,
+    getAllAdminIntoDB
 }

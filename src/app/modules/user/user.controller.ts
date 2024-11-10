@@ -56,9 +56,20 @@ const createAdmin = catchAsyn(async (req: Request, res: Response) => {
   });
 });
 
+const getAllAdmin = catchAsyn(async(req: Request, res: Response) => {
+  const admins = await UserService.getAllAdminIntoDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: admins,
+    message: "All Admin  fetched successfully",
+  });
+});
+
 export const UserController = {
   userSignUp,
   getAllUsers,
   userLogin,
-  createAdmin
+  createAdmin,
+  getAllAdmin
 };
