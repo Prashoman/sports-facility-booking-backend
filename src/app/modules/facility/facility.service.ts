@@ -1,7 +1,10 @@
 import { TFacility } from "./facility.interface";
 import { Facility } from "./facility.model";
 
-const createFacilityIntoDB = async (payload: TFacility) => {
+const createFacilityIntoDB = async (payload: TFacility,facilityImage:any) => {
+  if(facilityImage){
+    payload.image = facilityImage.path;
+  }
   const result = await Facility.create(payload);
   return result;
 };

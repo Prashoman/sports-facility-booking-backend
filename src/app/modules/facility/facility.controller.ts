@@ -5,9 +5,12 @@ import { FacilityService } from "./facility.service";
 import httpStatus from "http-status";
 
 const createFacility = catchAsyn(async (req: Request, res: Response) => {
+  const facilityImage = req.file;
   const facilityInfo = req.body;
+  // console.log(facilityInfo,facilityImage);
+  
   const insertedFacility = await FacilityService.createFacilityIntoDB(
-    facilityInfo
+    facilityInfo,facilityImage
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -34,15 +37,20 @@ const updateFacility = catchAsyn(async (req: Request, res: Response) => {
 
 const getAllFacilities = catchAsyn(async (req: Request, res: Response) => {
   const facilityId = req.params.facilityId;
-  const allFacilities = await FacilityService.getAllFacilitiesFromDB(facilityId);
-  if(!allFacilities || (Array.isArray(allFacilities) && allFacilities.length === 0)){
+  const allFacilities = await FacilityService.getAllFacilitiesFromDB(
+    facilityId
+  );
+  if (
+    !allFacilities ||
+    (Array.isArray(allFacilities) && allFacilities.length === 0)
+  ) {
     sendResponse(res, {
-       statusCode: httpStatus.NOT_FOUND,
-       success: false,
-       data: allFacilities,
-       message: "No data found",
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      data: allFacilities,
+      message: "No data found",
     });
-}
+  }
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
