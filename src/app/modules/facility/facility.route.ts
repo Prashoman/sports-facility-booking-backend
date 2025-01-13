@@ -23,11 +23,18 @@ route.post(
 route.put(
   "/facility/:id",
   auth("admin"),
+  multerUpload.single("facilityImage"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validationMiddleware(FacilityValidation.FacilityUpdateValidation),
   FacilityController.updateFacility
 );
 
 route.get("/facility/:facilityId?", FacilityController.getAllFacilities);
+
+route.get("/popular/facility", FacilityController.getPopularFacilities)
 
 route.delete("/facility/:id", auth("admin"), FacilityController.deleteFacility);
 

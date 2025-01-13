@@ -9,7 +9,10 @@ const createFacilityIntoDB = async (payload: TFacility,facilityImage:any) => {
   return result;
 };
 
-const updateFacilityFromDB = async (id: string, payload: TFacility) => {
+const updateFacilityFromDB = async (id: string, payload: TFacility, facilityImage: any) => {
+  if (facilityImage) {
+    payload.image = facilityImage.path;
+  }
   const result = await Facility.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
@@ -20,6 +23,11 @@ const getAllFacilitiesFromDB = async (payload:string) => {
     return result;
   }
   const result = await Facility.find({ isDeleted: false });
+  return result;
+};
+
+const getAllPopularFacilitiesFromDB = async () => {
+  const result = await Facility.find({ isDeleted: false }).sort({count:-1});
   return result;
 };
 
@@ -40,5 +48,6 @@ export const FacilityService = {
   createFacilityIntoDB,
   updateFacilityFromDB,
   getAllFacilitiesFromDB,
-  deleteFacilityFromDB
+  deleteFacilityFromDB,
+  getAllPopularFacilitiesFromDB
 };

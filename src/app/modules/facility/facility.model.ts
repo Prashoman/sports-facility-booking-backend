@@ -9,6 +9,7 @@ const facilitySchema = new Schema<TFacility>(
     image: { type: String, required: true },
     location: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },
+    count: { type: Number, default: 0 },
   },
   {
     timestamps: true,

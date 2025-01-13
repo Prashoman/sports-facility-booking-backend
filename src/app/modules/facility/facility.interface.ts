@@ -13,4 +13,5 @@ export type TFacility = {
     location: string;
     isDeleted: boolean;
     image?: string;
+    count?: number;
 }
