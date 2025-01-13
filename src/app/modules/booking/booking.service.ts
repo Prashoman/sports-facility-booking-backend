@@ -11,6 +11,8 @@ const bookingInsertIntoDb = async (
   payload: Partial<TBooking>,
   userId: string
 ) => {
+  // console.log("Payload :", payload);
+
   const exitsUser = await User.findById(userId);
   if (!exitsUser) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
@@ -20,9 +22,19 @@ const bookingInsertIntoDb = async (
     throw new AppError(httpStatus.NOT_FOUND, "Facility not found");
   }
 
+  const givenDate = new Date(payload.date as string);
+  const today = new Date();
+  givenDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  if(givenDate < today){
+    throw new AppError(httpStatus.BAD_REQUEST, "You can't book for past date");
+  }
+
   const exitsDate = await Booking.find({
     date: payload.date,
   }).select("startTime endTime");
+
   exitsDate.forEach((element) => {
     const exitsEndTime = new Date(`2000-05-07T${element.endTime}:00`);
     const payloadStartTime = new Date(`2000-05-07T${payload.startTime}:00`);
@@ -53,11 +65,12 @@ const bookingsGetFromDB = async (date: string | undefined) => {
 
   const DateFormatCheck = dateFormat.test(date);
   if (!DateFormatCheck) {
-
     const todayDate = getFormattedTodayDate(new Date());
-    // console.log("Today Date :",todayDate);
-    
-    const result = await Booking.find({ date: todayDate }).select("startTime endTime");
+    console.log("Today Date :", todayDate);
+
+    const result = await Booking.find({ date: todayDate }).select(
+      "startTime endTime"
+    );
     return result;
   }
   const result = await Booking.find({ date }).select("startTime endTime");
@@ -70,7 +83,7 @@ const getBookingByAdminFormDB = async (userRole: string) => {
   }
   const result = await Booking.find().populate("user").populate("facility");
   return result;
-}
+};
 
 const getBookingByUserFormDB = async (userId: string) => {
   const exitsUser = await User.findById(userId);
@@ -79,18 +92,21 @@ const getBookingByUserFormDB = async (userId: string) => {
   }
   const result = await Booking.find({ user: userId }).populate("facility");
   return result;
-}
+};
 
 const deleteBookingFromDB = async (bookingId: string) => {
-
-  const result = await Booking.findByIdAndUpdate(bookingId, { isBooked: "canceled" }, { new: true });
+  const result = await Booking.findByIdAndUpdate(
+    bookingId,
+    { isBooked: "canceled" },
+    { new: true }
+  );
   return result;
-}
+};
 
 export const BookingService = {
   bookingInsertIntoDb,
   bookingsGetFromDB,
   getBookingByAdminFormDB,
   getBookingByUserFormDB,
-  deleteBookingFromDB
+  deleteBookingFromDB,
 };
