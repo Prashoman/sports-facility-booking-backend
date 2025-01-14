@@ -6,6 +6,8 @@ import { Facility } from "../facility/facility.model";
 import timeToConvertHours from "../../../utils/timeToConvertHours";
 import { Booking } from "./booking.model";
 import { dateFormat, getFormattedTodayDate } from "./booking.constent";
+import { getAvailableTimeCalculate } from "../../../utils/getAvailableTime";
+import { todayDateAndInputDate } from "../../../utils/todayDateAndInputDate";
 
 const bookingInsertIntoDb = async (
   payload: Partial<TBooking>,
@@ -22,12 +24,8 @@ const bookingInsertIntoDb = async (
     throw new AppError(httpStatus.NOT_FOUND, "Facility not found");
   }
 
-  const givenDate = new Date(payload.date as string);
-  const today = new Date();
-  givenDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  if(givenDate < today){
+  const checkDate = todayDateAndInputDate(payload.date as string);
+  if (checkDate.givenDate < checkDate.today) {
     throw new AppError(httpStatus.BAD_REQUEST, "You can't book for past date");
   }
 
@@ -57,24 +55,62 @@ const bookingInsertIntoDb = async (
   return result;
 };
 
-const bookingsGetFromDB = async (date: string | undefined) => {
-  if (!date) {
-    const result = await Booking.find().populate("user").populate("facility");
-    return result;
+// get available time slot
+const bookingsGetFromDB = async (
+  date: string | undefined,
+  facilityId: string | undefined
+) => {
+  const initialTime = [
+    {
+      startTime: "01:00",
+      endTime: "24:00",
+    },
+  ];
+
+  //facilityId error
+  if (!facilityId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Facility  NOt Found");
+  }
+  const exitsFacility = await Facility.findById(facilityId);
+  // not exits facility error
+  if (!exitsFacility) {
+    throw new AppError(httpStatus.NOT_FOUND, "Facility not found");
   }
 
-  const DateFormatCheck = dateFormat.test(date);
-  if (!DateFormatCheck) {
-    const todayDate = getFormattedTodayDate(new Date());
-    console.log("Today Date :", todayDate);
-
-    const result = await Booking.find({ date: todayDate }).select(
-      "startTime endTime"
-    );
-    return result;
+  if (!date && facilityId) {
+    const result = await Booking.find({
+      $and: [
+        {
+          facility: facilityId,
+        },
+        {
+          date: getFormattedTodayDate(new Date()),
+        },
+      ],
+    }).select("startTime endTime");
+    const availableSlots = getAvailableTimeCalculate(initialTime, result);
+    return availableSlots;
+  } else {
+    const checkDate = todayDateAndInputDate(date as string);
+    if (checkDate.givenDate < checkDate.today) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "You can't check availability for past date"
+      );
+    }
+    const result = await Booking.find({
+      $and: [
+        {
+          facility: facilityId,
+        },
+        {
+          date,
+        },
+      ],
+    }).select("startTime endTime");
+    const availableSlots = getAvailableTimeCalculate(initialTime, result);
+    return availableSlots;
   }
-  const result = await Booking.find({ date }).select("startTime endTime");
-  return result;
 };
 
 const getBookingByAdminFormDB = async (userRole: string) => {

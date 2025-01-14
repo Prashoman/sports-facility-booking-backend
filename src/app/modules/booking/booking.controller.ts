@@ -18,7 +18,8 @@ const bookingInsert = catchAsyn(async (req: Request, res: Response) => {
 
 const bookingGets = catchAsyn(async (req: Request, res: Response) => {
   const date = req.query.date as string | undefined;
-  const result = await BookingService.bookingsGetFromDB(date);
+  const facilityId = req.query.facility as string | undefined;
+  const result = await BookingService.bookingsGetFromDB(date,facilityId);
   if (result.length === 0) {
     sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,

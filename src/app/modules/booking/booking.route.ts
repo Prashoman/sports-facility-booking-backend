@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.post('/bookings', auth('user'), validationMiddleware(BookingValidation.BookingInsertValidation), BookingController.bookingInsert);
-router.get("/check-availability", BookingController.bookingGets);
+router.get("/check-availability", auth('user'), BookingController.bookingGets);
 
 router.get('/bookings', auth('admin'), BookingController.bookingGetsByAdmin);
 router.get('/bookings/user', auth('user'), BookingController.bookingGetsByUser);
