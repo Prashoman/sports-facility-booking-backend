@@ -13,7 +13,12 @@ router.get("/check-availability", auth('user'), BookingController.bookingGets);
 
 router.get('/bookings', auth('admin'), BookingController.bookingGetsByAdmin);
 router.get('/bookings/user', auth('user'), BookingController.bookingGetsByUser);
+
+router.put('/bookings/:id', auth('user'), BookingController.bookingUpdate);
+
 router.delete('/bookings/:id', auth('user'), BookingController.bookingDelete);
+
+router.get('/bookings/:id', auth('user'), BookingController.bookingGetById);
 
 
 

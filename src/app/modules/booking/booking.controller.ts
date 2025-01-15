@@ -89,10 +89,36 @@ const bookingDelete = catchAsyn(async (req: Request, res: Response) => {
   });
 });
 
+const bookingUpdate = catchAsyn(async (req: Request, res: Response) => {
+  const bookingId = req.params.id;
+  const {id} = req.user;
+  const result = await BookingService.userBookingCancelInToDB(bookingId, id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+    message: "Booking cancelled successfully",
+  });
+});
+
+const bookingGetById = catchAsyn(async (req: Request, res: Response) => {
+  const bookingId = req.params.id;
+  const {id} = req.user;
+  const result = await BookingService.getBookingByIdFromDB(bookingId,id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: result,
+    message: "Booking retrieved successfully",
+  });
+});
+
 export const BookingController = {
   bookingInsert,
   bookingGets,
   bookingGetsByAdmin,
   bookingGetsByUser,
   bookingDelete,
+  bookingUpdate,
+  bookingGetById
 };

@@ -139,10 +139,36 @@ const deleteBookingFromDB = async (bookingId: string) => {
   return result;
 };
 
+const userBookingCancelInToDB = async (bookingId: string, userId: string) => {
+  const exitsUser = await User.findById(userId);
+  if (!exitsUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const result = await Booking.findOneAndUpdate(
+    { _id: bookingId, user: userId },
+    { isBooked: "canceled" },
+    { new: true }
+  );
+  return result;
+};
+
+const getBookingByIdFromDB = async (bookingId: string, id: string) => {
+  const exitsUser = await User.findById(id);
+  if (!exitsUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const result = await Booking.findOne({ _id: bookingId, user: id }).populate(
+    "facility"
+  );
+  return result;
+};
+
 export const BookingService = {
   bookingInsertIntoDb,
   bookingsGetFromDB,
   getBookingByAdminFormDB,
   getBookingByUserFormDB,
   deleteBookingFromDB,
+  userBookingCancelInToDB,
+  getBookingByIdFromDB,
 };
