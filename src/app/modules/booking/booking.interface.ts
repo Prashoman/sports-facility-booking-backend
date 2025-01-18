@@ -12,6 +12,7 @@ export type TBooking = {
     endTime: string;
     user: Types.ObjectId;
     facility: Types.ObjectId;
+    tranId: string;
     payableAmount: number;
     isBooked:TIsBooked;
 }

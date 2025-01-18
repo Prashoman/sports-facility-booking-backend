@@ -27,7 +27,7 @@ const getAllFacilitiesFromDB = async (payload:string) => {
 };
 
 const getAllPopularFacilitiesFromDB = async () => {
-  const result = await Facility.find({ isDeleted: false }).sort({count:-1});
+  const result = await Facility.find({ isDeleted: false }).sort({count:-1}).limit(10);
   return result;
 };
 

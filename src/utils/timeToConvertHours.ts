@@ -19,7 +19,9 @@ const timeToConvertHours = (startTime:string,endTime:string) => {
         diff_min-=60;
         diff_hour++;
     }
-    const calculateTime = diff_hour+"."+diff_min;
+    const totalMin = 60;
+    const calculateMinPrice = ((diff_min/totalMin)*100);
+    const calculateTime = diff_hour+"."+calculateMinPrice;
     return calculateTime;
 }
 

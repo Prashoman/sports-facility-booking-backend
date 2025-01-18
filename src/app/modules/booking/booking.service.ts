@@ -8,12 +8,13 @@ import { Booking } from "./booking.model";
 import { dateFormat, getFormattedTodayDate } from "./booking.constent";
 import { getAvailableTimeCalculate } from "../../../utils/getAvailableTime";
 import { todayDateAndInputDate } from "../../../utils/todayDateAndInputDate";
+import { paymentInitiate } from "../../../utils/payment.utils";
+
 
 const bookingInsertIntoDb = async (
   payload: Partial<TBooking>,
   userId: string
 ) => {
-  // console.log("Payload :", payload);
 
   const exitsUser = await User.findById(userId);
   if (!exitsUser) {
@@ -47,12 +48,25 @@ const bookingInsertIntoDb = async (
     payload.startTime as string,
     payload.endTime as string
   );
+  console.log("Time :", time);
+  
   const perHourPrice = exitsFacility.pricePerHour;
   const totalPrice = Number(time) * perHourPrice;
+  console.log("Per Hour Price :", perHourPrice);
+  console.log("Total Price :", totalPrice);
+  
   payload.payableAmount = totalPrice;
   payload.user = userId as any;
-  const result = await Booking.create(payload);
-  return result;
+  payload.tranId = new Date(Date.now());
+  await Booking.create(payload);
+
+  
+  payload.userInfo = exitsUser;
+
+  // console.log("Payload :", payload);
+  
+ const paymentResponse= paymentInitiate(payload)
+  return paymentResponse;
 };
 
 // get available time slot
