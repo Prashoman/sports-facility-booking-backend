@@ -13,6 +13,7 @@ export type TBooking = {
     user: Types.ObjectId;
     facility: Types.ObjectId;
     tranId: string;
+    status:boolean;
     payableAmount: number;
     isBooked:TIsBooked;
 }

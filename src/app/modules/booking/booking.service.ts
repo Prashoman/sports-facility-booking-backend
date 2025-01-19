@@ -52,12 +52,13 @@ const bookingInsertIntoDb = async (
   
   const perHourPrice = exitsFacility.pricePerHour;
   const totalPrice = Number(time) * perHourPrice;
-  console.log("Per Hour Price :", perHourPrice);
-  console.log("Total Price :", totalPrice);
+  // console.log("Per Hour Price :", perHourPrice);
+  // console.log("Total Price :", totalPrice);
   
   payload.payableAmount = totalPrice;
   payload.user = userId as any;
-  payload.tranId = new Date(Date.now());
+  // payload.tranId = new Date(Date.now());
+  payload.tranId = Math.floor(10000 + Math.random() * 90000).toString();
   await Booking.create(payload);
 
   
