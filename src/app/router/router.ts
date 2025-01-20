@@ -1,7 +1,5 @@
 import { Router } from "express";
-import { CategoryRoute } from "../modules/category/category.route";
-import { ProductRoute } from "../modules/product/product.route";
-import { CheckOutRoute } from "../modules/checkout/checkout.route";
+
 import { UserRoute } from "../modules/user/user.route";
 import { FacilityRoute } from "../modules/facility/facility.route";
 import { bookingRouter } from "../modules/booking/booking.route";
@@ -9,18 +7,6 @@ import {  paymentRouter } from "../modules/payment/payment.route";
 
 const router = Router();
 const modulerRoute = [
-  {
-    path: "/category",
-    route: CategoryRoute,
-  },
-  {
-    path: "/product",
-    route: ProductRoute,
-  },
-  {
-    path:"",
-    route:CheckOutRoute
-  },
   {
     path:"/auth",
     route: UserRoute
