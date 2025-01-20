@@ -16,4 +16,5 @@ export type TBooking = {
     status:boolean;
     payableAmount: number;
     isBooked:TIsBooked;
+    userInfo?: any;
 }

@@ -10,12 +10,10 @@ import { getAvailableTimeCalculate } from "../../../utils/getAvailableTime";
 import { todayDateAndInputDate } from "../../../utils/todayDateAndInputDate";
 import { paymentInitiate } from "../../../utils/payment.utils";
 
-
 const bookingInsertIntoDb = async (
   payload: Partial<TBooking>,
   userId: string
 ) => {
-
   const exitsUser = await User.findById(userId);
   if (!exitsUser) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
@@ -49,24 +47,23 @@ const bookingInsertIntoDb = async (
     payload.endTime as string
   );
   console.log("Time :", time);
-  
+
   const perHourPrice = exitsFacility.pricePerHour;
   const totalPrice = Number(time) * perHourPrice;
   // console.log("Per Hour Price :", perHourPrice);
   // console.log("Total Price :", totalPrice);
-  
+
   payload.payableAmount = totalPrice;
   payload.user = userId as any;
   // payload.tranId = new Date(Date.now());
   payload.tranId = Math.floor(10000 + Math.random() * 90000).toString();
   await Booking.create(payload);
 
-  
   payload.userInfo = exitsUser;
 
   // console.log("Payload :", payload);
-  
- const paymentResponse= paymentInitiate(payload)
+
+  const paymentResponse = paymentInitiate(payload);
   return paymentResponse;
 };
 
@@ -99,6 +96,9 @@ const bookingsGetFromDB = async (
           facility: facilityId,
         },
         {
+          status: true,
+        },
+        {
           date: getFormattedTodayDate(new Date()),
         },
       ],
@@ -117,6 +117,9 @@ const bookingsGetFromDB = async (
       $and: [
         {
           facility: facilityId,
+        },
+        {
+          status: true,
         },
         {
           date,
@@ -141,7 +144,9 @@ const getBookingByUserFormDB = async (userId: string) => {
   if (!exitsUser) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
-  const result = await Booking.find({ user: userId }).populate("facility");
+  const result = await Booking.find({ user: userId, status: true }).populate(
+    "facility"
+  );
   return result;
 };
 
