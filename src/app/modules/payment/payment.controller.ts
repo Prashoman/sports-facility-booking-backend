@@ -93,7 +93,7 @@ console.log({result});
           style="display: flex; align-items: center; justify-content: center; gap: 32px; padding: 24px 0;"
         >
           <a
-            href="/"
+            href="https://sports-facility-booking-platform-app.vercel.app/"
             style="width: 100%; background-color: #2563eb; color: white; padding: 8px; border-radius: 4px; margin-top: 12px; text-align: center;"
           >
             Continue Shopping
@@ -166,7 +166,7 @@ const paymentFailed = catchAsyn(async (req: Request, res: Response) => {
           <div class="error-icon">❌</div>
           <h1>Payment Failed</h1>
           <p>We're sorry, but your payment could not be processed at this time.</p>
-          <a href="/">Go Back to Home</a>
+          <a href="https://sports-facility-booking-platform-app.vercel.app/">Go Back to Home</a>
         </div>
       </body>
       </html>

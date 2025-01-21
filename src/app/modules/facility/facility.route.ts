@@ -3,19 +3,12 @@ import { validationMiddleware } from "../../middleware/Validation.Middelware";
 import { FacilityValidation } from "./facility.validation";
 import { FacilityController } from "./facility.controller";
 import auth from "../../middleware/auth";
-import { multerUpload } from "../../config/multer.config";
 
 const route = express.Router();
 
 route.post(
   "/facility",
   auth("admin"),
-  multerUpload.single("facilityImage"),
-  (req: Request, res: Response, next: NextFunction) => {
-    // console.log(req.body);
-    req.body = JSON.parse(req.body.data);
-    next();
-  },
   validationMiddleware(FacilityValidation.FacilityCreateValidation),
   FacilityController.createFacility
 );
@@ -23,11 +16,6 @@ route.post(
 route.put(
   "/facility/:id",
   auth("admin"),
-  multerUpload.single("facilityImage"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req.body.data);
-    next();
-  },
   validationMiddleware(FacilityValidation.FacilityUpdateValidation),
   FacilityController.updateFacility
 );

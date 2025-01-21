@@ -11,9 +11,10 @@ export const paymentInitiate = async (payload: any) => {
       store_id: process.env.PAYMENT_STORE_ID,
       signature_key: config.payment_signature_key,
       tran_id: payload?.tranId,
-      success_url: `https://sports-facility-booking-platform-app.vercel.app/payment-success?transaction_id=${payload?.tranId}`,
-      fail_url: "http://www.merchantdomain.com/faile dpage.html",
-      cancel_url: "http://localhost:5173",
+      success_url: `https://sports-facility-booking-server-iota.vercel.app/api/payment/success?transId=${payload?.tranId}`,
+      fail_url:
+        "https://sports-facility-booking-server-iota.vercel.app/api/payment/fail",
+      cancel_url: "https://sports-facility-booking-platform-app.vercel.app/",
       amount: payload.payableAmount,
       currency: "BDT",
       desc: "Merchant Registration Payment",

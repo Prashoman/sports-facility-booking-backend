@@ -29,10 +29,13 @@ const bookingInsertIntoDb = async (
   }
 
   const exitsDate = await Booking.find({
-    date: payload.date,
+    $and: [{ date: payload.date },{
+      facility: payload.facility
+    }, { status: true }],
   }).select("startTime endTime");
+  console.log({ exitsDate });
 
-  exitsDate.forEach((element) => {
+  exitsDate?.forEach((element) => {
     const exitsEndTime = new Date(`2000-05-07T${element.endTime}:00`);
     const payloadStartTime = new Date(`2000-05-07T${payload.startTime}:00`);
     const payloadEndTime = new Date(`2000-05-07T${payload.endTime}:00`);

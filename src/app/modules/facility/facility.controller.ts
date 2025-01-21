@@ -5,13 +5,11 @@ import { FacilityService } from "./facility.service";
 import httpStatus from "http-status";
 
 const createFacility = catchAsyn(async (req: Request, res: Response) => {
-  const facilityImage = req.file;
   const facilityInfo = req.body;
   // console.log(facilityInfo,facilityImage);
 
   const insertedFacility = await FacilityService.createFacilityIntoDB(
-    facilityInfo,
-    facilityImage
+    facilityInfo
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -23,13 +21,11 @@ const createFacility = catchAsyn(async (req: Request, res: Response) => {
 
 const updateFacility = catchAsyn(async (req: Request, res: Response) => {
   const facilityId = req.params.id;
-  const facilityImage = req.file;
   const facilityInfo = req.body;
 
   const update = await FacilityService.updateFacilityFromDB(
     facilityId,
-    facilityInfo,
-    facilityImage
+    facilityInfo
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
