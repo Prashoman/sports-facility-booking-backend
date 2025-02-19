@@ -7,7 +7,8 @@ const app: Application = express();
 app.use(cors({ 
   origin: [
     "http://localhost:5173", 
-    "https://sports-facility-booking-platform-app.vercel.app"
+    "https://sports-facility-booking-platform-app.vercel.app",
+    "https://sport-facility-booking-platform-app.vercel.app"
   ],
   credentials: true 
 }));
